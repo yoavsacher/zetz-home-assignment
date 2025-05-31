@@ -45,10 +45,10 @@ export class WorkerPool {
 
     this.taskQueue.push(task);
     this.updateStatistics();
-    
+
     // Try to process the task immediately
     this.processNextTask();
-    
+
     return task.id;
   }
 
@@ -73,19 +73,17 @@ export class WorkerPool {
   }
 
   private getAvailableWorker(): WorkerInfo | null {
-    for (const workerInfo of this.workers.values()) {
-      if (workerInfo.isIdle) {
-        return workerInfo;
-      }
-    }
-    return null;
+    return (
+      Array.from(this.workers.values()).find(workerInfo => workerInfo.isIdle) ||
+      null
+    );
   }
 
   private async createWorker(): Promise<WorkerInfo | null> {
     try {
       const workerId = `worker-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       const workerPath = path.join(__dirname, '../worker/taskWorker.js');
-      
+
       const worker = new Worker(workerPath, {
         workerData: {
           taskSimulatedDuration: config.taskSimulatedDuration,
@@ -105,12 +103,12 @@ export class WorkerPool {
         this.handleWorkerResponse(workerInfo, response);
       });
 
-      worker.on('error', (error) => {
+      worker.on('error', error => {
         console.error(`Worker ${workerId} error:`, error);
         this.removeWorker(workerId);
       });
 
-      worker.on('exit', (code) => {
+      worker.on('exit', code => {
         if (code !== 0) {
           console.error(`Worker ${workerId} exited with code ${code}`);
         }
@@ -119,7 +117,7 @@ export class WorkerPool {
 
       this.workers.set(workerId, workerInfo);
       this.updateStatistics();
-      
+
       return workerInfo;
     } catch (error) {
       console.error('Failed to create worker:', error);
@@ -139,7 +137,7 @@ export class WorkerPool {
 
     workerInfo.isIdle = false;
     workerInfo.lastUsed = new Date();
-    
+
     // Clear existing timeout
     if (workerInfo.timeout) {
       clearTimeout(workerInfo.timeout);
@@ -154,9 +152,12 @@ export class WorkerPool {
     this.updateStatistics();
   }
 
-  private handleWorkerResponse(workerInfo: WorkerInfo, response: WorkerResponse): void {
+  private handleWorkerResponse(
+    workerInfo: WorkerInfo,
+    response: WorkerResponse
+  ): void {
     const { taskId, processingTime, error } = response;
-    
+
     // Update processing times for average calculation
     this.processingTimes.push(processingTime);
     if (this.processingTimes.length > 1000) {
@@ -165,17 +166,17 @@ export class WorkerPool {
 
     // Update statistics
     this.statistics.tasksProcessed++;
-    
+
     if (response.type === 'TASK_COMPLETED') {
       this.statistics.tasksSucceeded++;
     } else {
       this.statistics.tasksFailed++;
-      
+
       // Handle retry logic
       const failedTask = this.findTaskById(taskId);
       if (failedTask && failedTask.attempts < config.taskMaxRetries) {
         this.statistics.retries++;
-        
+
         // Schedule retry after delay
         setTimeout(() => {
           failedTask.status = 'pending';
@@ -187,21 +188,22 @@ export class WorkerPool {
 
     // Calculate average processing time
     if (this.processingTimes.length > 0) {
-      this.statistics.averageProcessingTime = 
-        this.processingTimes.reduce((sum, time) => sum + time, 0) / this.processingTimes.length;
+      this.statistics.averageProcessingTime =
+        this.processingTimes.reduce((sum, time) => sum + time, 0) /
+        this.processingTimes.length;
     }
 
     // Mark worker as idle and set timeout
     workerInfo.isIdle = true;
     workerInfo.lastUsed = new Date();
-    
+
     // Set worker timeout
     workerInfo.timeout = setTimeout(() => {
       this.removeWorker(workerInfo.id);
     }, config.workerTimeout);
 
     this.updateStatistics();
-    
+
     // Process next task if available
     this.processNextTask();
   }
@@ -224,8 +226,12 @@ export class WorkerPool {
 
   private updateStatistics(): void {
     this.statistics.currentQueueLength = this.taskQueue.length;
-    this.statistics.idleWorkers = Array.from(this.workers.values()).filter(w => w.isIdle).length;
-    this.statistics.hotWorkers = Array.from(this.workers.values()).filter(w => !w.isIdle).length;
+    this.statistics.idleWorkers = Array.from(this.workers.values()).filter(
+      w => w.isIdle
+    ).length;
+    this.statistics.hotWorkers = Array.from(this.workers.values()).filter(
+      w => !w.isIdle
+    ).length;
   }
 
   getStatistics(): Statistics {
@@ -234,15 +240,15 @@ export class WorkerPool {
 
   async shutdown(): Promise<void> {
     console.log('Shutting down worker pool...');
-    
+
     for (const workerInfo of this.workers.values()) {
       if (workerInfo.timeout) {
         clearTimeout(workerInfo.timeout);
       }
       await workerInfo.worker.terminate();
     }
-    
+
     this.workers.clear();
     console.log('Worker pool shutdown complete');
   }
-} 
+}
