@@ -8,33 +8,33 @@ const workerPool = new WorkerPool();
 router.post('/tasks', async (req: Request, res: Response): Promise<void> => {
   try {
     const { message } = req.body;
-    
+
     // Validate input
     if (!message || typeof message !== 'string') {
       res.status(400).json({
-        error: 'Invalid request body. Expected { "message": "string" }'
+        error: 'Invalid request body. Expected { "message": "string" }',
       });
       return;
     }
-    
+
     if (message.trim().length === 0) {
       res.status(400).json({
-        error: 'Message cannot be empty'
+        error: 'Message cannot be empty',
       });
       return;
     }
-    
+
     // Enqueue the task
     const taskId = await workerPool.enqueueTask(message.trim());
-    
+
     res.status(201).json({
       taskId,
-      message: 'Task enqueued successfully'
+      message: 'Task enqueued successfully',
     });
   } catch (error) {
     console.error('Error enqueuing task:', error);
     res.status(500).json({
-      error: 'Internal server error'
+      error: 'Internal server error',
     });
   }
 });
@@ -47,7 +47,7 @@ router.get('/statistics', (req: Request, res: Response): void => {
   } catch (error) {
     console.error('Error getting statistics:', error);
     res.status(500).json({
-      error: 'Internal server error'
+      error: 'Internal server error',
     });
   }
 });
@@ -57,4 +57,4 @@ export const shutdownWorkerPool = async (): Promise<void> => {
   await workerPool.shutdown();
 };
 
-export default router; 
+export default router;

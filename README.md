@@ -15,9 +15,11 @@ A self-contained microservice for asynchronous task processing with worker threa
 ## API Endpoints
 
 ### POST `/tasks`
+
 Enqueue a new task for asynchronous processing.
 
 **Request Body:**
+
 ```json
 {
   "message": "Your task message here"
@@ -25,6 +27,7 @@ Enqueue a new task for asynchronous processing.
 ```
 
 **Response:**
+
 ```json
 {
   "taskId": "uuid-generated-task-id",
@@ -33,9 +36,11 @@ Enqueue a new task for asynchronous processing.
 ```
 
 ### GET `/statistics`
+
 Get real-time processing metrics.
 
 **Response:**
+
 ```json
 {
   "tasksProcessed": 42,
@@ -50,9 +55,11 @@ Get real-time processing metrics.
 ```
 
 ### GET `/health`
+
 Health check endpoint.
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -91,38 +98,45 @@ WORKER_TIMEOUT=30000
 ## Installation and Setup
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 
 ### Installation
 
 1. **Clone or extract the project:**
+
    ```bash
    cd tasks-microservice
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Create environment file (optional):**
+
    ```bash
    cp .env.example .env
    # Edit .env with your preferred settings
    ```
 
 4. **Build the TypeScript code:**
+
    ```bash
    npm run build
    ```
 
 5. **Start the service:**
+
    ```bash
    npm start
    ```
 
    Or for development with auto-reload:
+
    ```bash
    npm run dev
    ```
@@ -132,11 +146,13 @@ WORKER_TIMEOUT=30000
 ### Using curl
 
 1. **Health Check:**
+
    ```bash
    curl http://localhost:3000/health
    ```
 
 2. **Enqueue a Task:**
+
    ```bash
    curl -X POST http://localhost:3000/tasks \
      -H "Content-Type: application/json" \
@@ -144,11 +160,13 @@ WORKER_TIMEOUT=30000
    ```
 
 3. **Get Statistics:**
+
    ```bash
    curl http://localhost:3000/statistics
    ```
 
 4. **Enqueue Multiple Tasks:**
+
    ```bash
    # Task 1
    curl -X POST http://localhost:3000/tasks \
@@ -174,8 +192,8 @@ const response = await fetch('http://localhost:3000/tasks', {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    message: 'My task message'
-  })
+    message: 'My task message',
+  }),
 });
 
 const result = await response.json();
@@ -229,6 +247,7 @@ The service creates a `logs/` directory with a `tasks.log` file that contains al
 ## Graceful Shutdown
 
 The service handles shutdown signals (SIGTERM, SIGINT) gracefully:
+
 1. Stops accepting new HTTP connections
 2. Waits for active workers to complete current tasks
 3. Terminates all worker threads
@@ -252,6 +271,7 @@ The service handles shutdown signals (SIGTERM, SIGINT) gracefully:
 ### Debugging
 
 Enable verbose logging by setting `NODE_ENV=development` and check:
+
 - Console output for worker creation/termination
 - `logs/tasks.log` for task processing details
 - `/statistics` endpoint for real-time metrics

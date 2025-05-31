@@ -9,7 +9,7 @@ export class FileLogger {
   constructor(logFileName: string = 'tasks.log') {
     this.logFilePath = path.join(process.cwd(), 'logs', logFileName);
     this.lockFilePath = `${this.logFilePath}.lock`;
-    
+
     // Ensure logs directory exists
     const logsDir = path.dirname(this.logFilePath);
     if (!fs.existsSync(logsDir)) {
@@ -22,7 +22,11 @@ export class FileLogger {
     }
   }
 
-  async appendLog(workerId: string, taskId: string, message: string): Promise<void> {
+  async appendLog(
+    workerId: string,
+    taskId: string,
+    message: string
+  ): Promise<void> {
     const timestamp = new Date().toISOString();
     const logEntry = `${timestamp} | Worker: ${workerId} | Task: ${taskId} | Message: ${message}\n`;
 
@@ -65,4 +69,4 @@ export class FileLogger {
   getLogFilePath(): string {
     return this.logFilePath;
   }
-} 
+}

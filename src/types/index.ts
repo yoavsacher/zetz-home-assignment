@@ -1,4 +1,4 @@
- interface Task {
+interface Task {
   id: string;
   message: string;
   createdAt: Date;
@@ -9,19 +9,19 @@
   error?: string;
 }
 
- interface WorkerMessage {
+interface WorkerMessage {
   type: 'PROCESS_TASK';
   task: Task;
 }
 
- interface WorkerResponse {
+interface WorkerResponse {
   type: 'TASK_COMPLETED' | 'TASK_FAILED';
   taskId: string;
   processingTime: number;
   error?: string;
 }
 
- interface Statistics {
+interface Statistics {
   tasksProcessed: number;
   retries: number;
   tasksSucceeded: number;
@@ -32,7 +32,7 @@
   hotWorkers: number;
 }
 
- interface Config {
+interface Config {
   serverPort: number;
   taskSimulatedDuration: number;
   taskSimulatedErrorPercentage: number;
@@ -41,4 +41,4 @@
   workerTimeout: number;
 }
 
-export {Task, WorkerMessage, WorkerResponse, Statistics, Config};
+export { Task, WorkerMessage, WorkerResponse, Statistics, Config };
