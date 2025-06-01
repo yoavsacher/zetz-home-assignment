@@ -1,6 +1,7 @@
 import { Worker } from 'worker_threads';
 import * as os from 'os';
 import * as path from 'path';
+import * as fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { Task, WorkerResponse, Statistics } from '../types';
 import { config } from '../config';
@@ -82,7 +83,25 @@ export class WorkerPool {
   private async createWorker(): Promise<WorkerInfo | null> {
     try {
       const workerId = `worker-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const workerPath = path.join(__dirname, '../worker/taskWorker.js');
+
+      // Always use the compiled JS file from dist directory
+      // This works for both development (after build) and production
+      const workerPath = path.resolve(
+        process.cwd(),
+        'dist/worker/taskWorker.js'
+      );
+
+      console.log(`Creating worker ${workerId} with path: ${workerPath}`);
+
+      // Check if the worker file exists
+      if (!fs.existsSync(workerPath)) {
+        console.error(`Worker file does not exist at: ${workerPath}`);
+        console.log(`Current working directory: ${process.cwd()}`);
+        console.log(
+          `Please run 'npm run build' first to compile TypeScript files`
+        );
+        return null;
+      }
 
       const worker = new Worker(workerPath, {
         workerData: {
@@ -100,6 +119,7 @@ export class WorkerPool {
 
       // Set up worker event handlers
       worker.on('message', (response: WorkerResponse) => {
+        console.log(`Received message from worker ${workerId}:`, response);
         this.handleWorkerResponse(workerInfo, response);
       });
 
@@ -118,6 +138,7 @@ export class WorkerPool {
       this.workers.set(workerId, workerInfo);
       this.updateStatistics();
 
+      console.log(`Worker ${workerId} created successfully`);
       return workerInfo;
     } catch (error) {
       console.error('Failed to create worker:', error);
@@ -130,6 +151,8 @@ export class WorkerPool {
     if (!task) {
       return;
     }
+
+    console.log(`Assigning task ${task.id} to worker ${workerInfo.id}`);
 
     task.status = 'processing';
     task.processingStartTime = new Date();
@@ -154,8 +177,19 @@ export class WorkerPool {
 
   private handleWorkerResponse(
     workerInfo: WorkerInfo,
-    response: WorkerResponse
+    response: WorkerResponse | any
   ): void {
+    // Handle WORKER_READY message
+    if (response.type === 'WORKER_READY') {
+      console.log(`Worker ${response.workerId} is ready`);
+      return;
+    }
+
+    // Only process task-related responses
+    if (response.type !== 'TASK_COMPLETED' && response.type !== 'TASK_FAILED') {
+      return;
+    }
+
     const { taskId, processingTime, error } = response;
 
     // Update processing times for average calculation
