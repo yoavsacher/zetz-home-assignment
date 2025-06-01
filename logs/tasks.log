@@ -20,3 +20,21 @@
 2025-06-01T08:40:33.691Z | Worker: worker-1748767231666-gqgpzakuk | Task: beabfbe2-44e7-4168-b0bb-81dc56352dde | Message: Failed: Simulated failure for task beabfbe2-44e7-4168-b0bb-81dc56352dde
 2025-06-01T08:40:41.724Z | Worker: worker-1748767231666-gqgpzakuk | Task: 3c86b378-0e1f-45b0-b066-be8fb249fd8c | Message: Started processing: Final verification test
 2025-06-01T08:40:43.734Z | Worker: worker-1748767231666-gqgpzakuk | Task: 3c86b378-0e1f-45b0-b066-be8fb249fd8c | Message: Failed: Simulated failure for task 3c86b378-0e1f-45b0-b066-be8fb249fd8c
+2025-06-01T09:06:44.059Z | Worker: worker-1748768804058-ct9ttpl9o | Task: 52da652d-0790-44ad-952e-72efd2f64358 | Message: Started processing: Live test task from README verification
+2025-06-01T09:06:46.074Z | Worker: worker-1748768804058-ct9ttpl9o | Task: 52da652d-0790-44ad-952e-72efd2f64358 | Message: Failed: Simulated failure for task 52da652d-0790-44ad-952e-72efd2f64358
+2025-06-01T09:06:56.199Z | Worker: worker-1748768804058-ct9ttpl9o | Task: 493aaf11-ce53-4f87-9ef6-21febb5b0a3d | Message: Started processing: Test task
+2025-06-01T09:06:58.208Z | Worker: worker-1748768804058-ct9ttpl9o | Task: 493aaf11-ce53-4f87-9ef6-21febb5b0a3d | Message: Completed successfully: Test task
+2025-06-01T09:07:13.440Z | Worker: worker-1748768804058-ct9ttpl9o | Task: 32262168-bedd-4bd5-be47-c2428db1e75b | Message: Started processing: Test task
+2025-06-01T09:07:15.445Z | Worker: worker-1748768804058-ct9ttpl9o | Task: 32262168-bedd-4bd5-be47-c2428db1e75b | Message: Completed successfully: Test task
+2025-06-01T09:11:32.252Z | Worker: worker-1748769092252-mkv9xyc0o | Task: bc8b45aa-11fa-4d5a-aefd-28d7bf10ebf9 | Message: Started processing: Load test task 1
+2025-06-01T09:11:32.353Z | Worker: worker-1748769092352-ojlgk4ox4 | Task: 12dbc514-28a0-4372-b606-8703ef6e1863 | Message: Started processing: Load test task 2
+2025-06-01T09:11:32.489Z | Worker: worker-1748769092488-i4obhuc2j | Task: 4086f8bf-c6a9-408e-b67f-a7e8b11cd8d9 | Message: Started processing: Load test task 3
+2025-06-01T09:11:32.591Z | Worker: worker-1748769092591-3nn4hnqig | Task: 1686d753-7adc-47f7-b416-b612c8d0047d | Message: Started processing: Load test task 4
+2025-06-01T09:11:32.699Z | Worker: worker-1748769092698-ac1a21rbz | Task: a8af8527-9c85-4aad-b30c-1bd25d5be05d | Message: Started processing: Load test task 5
+2025-06-01T09:11:34.274Z | Worker: worker-1748769092252-mkv9xyc0o | Task: bc8b45aa-11fa-4d5a-aefd-28d7bf10ebf9 | Message: Completed successfully: Load test task 1
+2025-06-01T09:11:34.368Z | Worker: worker-1748769092352-ojlgk4ox4 | Task: 12dbc514-28a0-4372-b606-8703ef6e1863 | Message: Failed: Simulated failure for task 12dbc514-28a0-4372-b606-8703ef6e1863
+2025-06-01T09:11:34.508Z | Worker: worker-1748769092488-i4obhuc2j | Task: 4086f8bf-c6a9-408e-b67f-a7e8b11cd8d9 | Message: Completed successfully: Load test task 3
+2025-06-01T09:11:34.599Z | Worker: worker-1748769092591-3nn4hnqig | Task: 1686d753-7adc-47f7-b416-b612c8d0047d | Message: Completed successfully: Load test task 4
+2025-06-01T09:11:34.706Z | Worker: worker-1748769092698-ac1a21rbz | Task: a8af8527-9c85-4aad-b30c-1bd25d5be05d | Message: Completed successfully: Load test task 5
+2025-06-01T09:14:54.396Z | Worker: worker-1748769294395-a9y166vgt | Task: 6407a7ef-9dac-40b5-b21f-cc19f1bae116 | Message: Started processing: Test task 1
+2025-06-01T09:14:56.404Z | Worker: worker-1748769294395-a9y166vgt | Task: 6407a7ef-9dac-40b5-b21f-cc19f1bae116 | Message: Completed successfully: Test task 1
